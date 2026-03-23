@@ -85,26 +85,11 @@ def animate(frame):
     
     return rays + [info_text]
 
-print("Создаю анимацию...")
+
 
 anim = FuncAnimation(fig, animate, init_func=init, 
                      frames=51, interval=100, blit=True)
 
 writer = PillowWriter(fps=10)
 anim.save('light_deflection.gif', writer=writer)
-print("Анимация сохранена как 'light_deflection.gif'")
-
 plt.show()
-
-print("\n" + "="*40)
-print("ИНФОРМАЦИЯ О СИМУЛЯЦИИ")
-print("="*40)
-print("Что показывает анимация:")
-print("1. Лучи света искривляются при прохождении мимо звезды")
-print("2. Чем ближе луч к звезде (меньше b), тем сильнее искривление")
-print("3. Формула отклонения: θ = 4GM/(c²b)")
-print("\nРассчитанные углы:")
-for b in b_values:
-    theta = 4 * G * M / (c**2 * b)
-    print(f"b = {b:.1f}: θ = {np.degrees(theta):.2f} градусов")
-print("="*40)
