@@ -4,9 +4,9 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 from matplotlib.patches import Circle
 
 M = 3.0
+m = 0.01
 G = 1.0
 c = 1.0
-
 b_values = [2.5, 3.5, 4.5, 6.0]  
 colors = ['red', 'orange', 'green', 'blue']
 
@@ -29,18 +29,12 @@ ax.add_patch(star)
 glow = Circle((0, 0), 2.5, color='yellow', alpha=0.2)
 ax.add_patch(glow)
 
-def calculate_ray(b):
+def calculate_ray(r):
     x = np.linspace(x_min, x_max, 300)
-    theta = 4 * G * M / (c**2 * b)
-    y = np.zeros_like(x)
-    
-    for i, xi in enumerate(x):
-        if xi < 0:
-            y[i] = b
-        else:
-            distance_effect = np.exp(-xi/4)
-            y[i] = b - theta * xi * distance_effect
-    
+    y = x
+    F = G * (M * m)/r**2
+    y = y / r * F
+
     return x, y
 
 rays = []
