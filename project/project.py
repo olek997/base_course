@@ -7,12 +7,13 @@ M = 3.0
 m = 0.01
 G = 1.0
 c = 1.0
+v_x = 100
+v_y = 0
+
 b_values = [2.5, 3.5, 4.5, 6.0]  
 colors = ['red', 'orange', 'green', 'blue']
-
 x_min, x_max = -12, 12
 y_min, y_max = -4, 8
-
 fig = plt.figure(figsize=(12, 6))
 ax = fig.add_subplot(111)
 
@@ -26,64 +27,7 @@ ax.set_title('Искривление света вблизи массивной 
 
 star = Circle((0, 0), 1.8, color='orange', alpha=0.8, label='Звезда')
 ax.add_patch(star)
-glow = Circle((0, 0), 2.5, color='yellow', alpha=0.2)
-ax.add_patch(glow)
-
-def calculate_ray(r):
-    x = np.linspace(x_min, x_max, 300)
-    y = x
-    F = G * (M * m)/r**2
-    y = y / r * F
-
-    return x, y
-
-rays = []
-ray_data = []
-
-for i, (b, color) in enumerate(zip(b_values, colors)):
-    x, y = calculate_ray(b)
-    ray_data.append((x, y))
-    
-    ray, = ax.plot([], [], color=color, linewidth=2, label=f'b = {b}')
-    rays.append(ray)
-
-ax.legend(loc='upper right')
-
-info_text = ax.text(0.02, 0.98, '', transform=ax.transAxes,
-                    verticalalignment='top',
-                    bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
-
-def init():
-    for ray in rays:
-        ray.set_data([], [])
-    info_text.set_text('')
-    return rays + [info_text]
-
-def animate(frame):
-    
-    progress = frame / 50
-
-    max_x = x_min + (x_max - x_min) * progress
-    
-    for i, (ray, (x, y)) in enumerate(zip(rays, ray_data)):
-        mask = x <= max_x
-        ray.set_data(x[mask], y[mask])
-    info = f"Кадр: {frame}/50\n"
-    info += f"Прогресс: {progress*100:.0f}%\n\n"
-    
-    for i, b in enumerate(b_values):
-        theta = 4 * G * M / (c**2 * b)
-        info += f"b={b:.1f}: {np.degrees(theta):.1f}°\n"
-    
-    info_text.set_text(info)
-    
-    return rays + [info_text]
-
-
-
-anim = FuncAnimation(fig, animate, init_func=init, 
-                     frames=51, interval=100, blit=True)
-
-writer = PillowWriter(fps=10)
-anim.save('light_deflection.gif', writer=writer)
-plt.show()
+def update(t):
+    t = np.linspace(0, 5, 100)
+    x = v_x*t
+    y = v_y * t
