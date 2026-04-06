@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from scipy.integrate import solve_ivp
-
-M = 1.5         
+M = 1.0         
 R_star = 3.0      
 b_values = [7, 10, 13, 16]
 
